@@ -321,21 +321,20 @@ export default function BancoPage() {
                 {/* Habilidade */}
                 <div className="space-y-1">
                   <Label className="text-xs text-muted-foreground">Habilidade</Label>
-                  <Select
-                    value={filterSkill}
-                    onValueChange={setFilterSkill}
+                  <Input
+                    id="filter-skill"
+                    list="filter-skills-list"
+                    value={filterSkill === ALL ? "" : filterSkill}
+                    onChange={(e) => setFilterSkill(e.target.value.toUpperCase() || ALL)}
                     disabled={availableSkills.length === 0}
-                  >
-                    <SelectTrigger id="filter-skill" className="h-9 text-sm">
-                      <SelectValue placeholder="Todas" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={ALL}>Todas as habilidades</SelectItem>
-                      {availableSkills.map((s) => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Todas"
+                    className="h-9 text-sm"
+                  />
+                  <datalist id="filter-skills-list">
+                    {availableSkills.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </datalist>
                 </div>
 
                 {/* Tipo */}

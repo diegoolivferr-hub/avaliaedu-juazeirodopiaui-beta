@@ -229,8 +229,8 @@ export function QuestionForm({
 
   // Rastreia o último token processado para detectar mudanças
   const prevBatchToken = useRef<number>(batchResetToken ?? 0);
-  /** Ref para o botão trigger do select de habilidade — usado para foco automático */
-  const skillTriggerRef = useRef<HTMLButtonElement>(null);
+  /** Ref para o input de habilidade — usado para foco automático */
+  const skillInputRef = useRef<HTMLInputElement>(null);
   /** Sinaliza que o foco deve ser movido para o campo de habilidade após o reset */
   const [focusSkill, setFocusSkill] = useState(false);
 
@@ -261,12 +261,12 @@ export function QuestionForm({
     }
   }, [batchResetToken]);
 
-  /** Move o foco para o select de habilidade assim que o DOM estiver pronto */
+  /** Move o foco para o input de habilidade assim que o DOM estiver pronto */
   useEffect(() => {
-    if (focusSkill && skillTriggerRef.current) {
-      // Pequeno delay para garantir que o Radix já terminou de renderizar
+    if (focusSkill && skillInputRef.current) {
+      // Pequeno delay para garantir que o React já terminou de renderizar
       const id = setTimeout(() => {
-        skillTriggerRef.current?.focus();
+        skillInputRef.current?.focus();
         setFocusSkill(false);
       }, 50);
       return () => clearTimeout(id);
@@ -428,25 +428,22 @@ export function QuestionForm({
               <Label>
                 Habilidade (opcional)
               </Label>
-              <Select
+              <Input
+                ref={skillInputRef}
+                list="skills-list"
                 value={value.skill || ""}
-                onValueChange={(v) => update("skill", v)}
+                onChange={(e) => update("skill", e.target.value.toUpperCase())}
                 disabled={!value.grade || !value.subject || filteredSkills.length === 0}
-              >
-                <SelectTrigger
-                  ref={skillTriggerRef}
-                  data-testid="select-skill"
-                >
-                  <SelectValue placeholder={filteredSkills.length === 0 ? "Nenhuma habilidade" : "Selecione"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {filteredSkills.map((s) => (
-                    <SelectItem key={s.id} value={s.code}>
-                      {s.code} - {s.description.length > 30 ? s.description.substring(0, 30) + "..." : s.description}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder={filteredSkills.length === 0 ? "Nenhuma habilidade" : "Digite o código"}
+                data-testid="input-skill"
+              />
+              <datalist id="skills-list">
+                {filteredSkills.map((s) => (
+                  <option key={s.id} value={s.code}>
+                    {s.description.length > 50 ? s.description.substring(0, 50) + "..." : s.description}
+                  </option>
+                ))}
+              </datalist>
             </div>
           </div>
         </CardContent>
