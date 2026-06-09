@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 33% 98%; /* #f5f7fa */
+    --foreground: 215 27.9% 16.9%; /* #1F2937 */
+
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 215 27.9% 16.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 27.9% 16.9%;
+
+    --primary: 142 76% 36%; /* #16a34a (Green) */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+
+    --brand: 218 80% 30%; /* #0f3c88 (Blue) */
+    --brand-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 142 76% 36%; /* Primary color for focus ring */
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --brand: 218 80% 30%;
+    --brand-foreground: 0 0% 100%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 142 76% 36%;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body {
+    background: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Remove o layout flexbox do wrapper principal na impressão (previne bug de duplicação do Chrome) */
+  .print-wrapper {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+  }
+
+  /* Cada "folha" simulada vira exatamente uma folha impressa real */
+  .print-page {
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Força a questão a não quebrar no meio da página */
+  .questao {
+    display: block !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 24px !important;
+  }
+
+  .print-layout {
+    display: block;
+    page-break-after: auto;
+  }
+
+  /* Oculta o header/navbar e botões na impressão */
+  header, nav, button, .no-print {
+    display: none !important;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .hover-elevate {
+    @apply hover:-translate-y-0.5 hover:shadow-md transition-all duration-200;
+  }
+  .active-elevate-2 {
+    @apply active:translate-y-0 active:shadow-sm transition-all duration-200;
+  }
+}
+
+/* ─── KaTeX (fórmulas matemáticas) ─────────────────────────────────────────── */
+.katex {
+  /* Permite quebra de linha dentro das fórmulas e respeita a largura da página */
+  white-space: normal !important;
+  word-break: break-word;
+  /* Herda o tamanho de fonte do contexto para ficar proporcional ao texto */
+  font-size: 1em !important;
+}
+
+.katex-display {
+  /* Espaço ao redor de fórmulas em bloco (display mode) */
+  margin: 8px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Garante que fórmulas dentro de alternativas ou blocos de apoio não
+   ultrapassem a largura do contêiner pai */
+.questao .katex,
+.question-preview .katex {
+  max-width: 100%;
+  overflow-x: auto;
+}
