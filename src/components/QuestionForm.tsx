@@ -433,8 +433,8 @@ export function QuestionForm({
                 list="skills-list"
                 value={value.skill || ""}
                 onChange={(e) => update("skill", e.target.value.toUpperCase())}
-                disabled={!value.grade || !value.subject || filteredSkills.length === 0}
-                placeholder={filteredSkills.length === 0 ? "Nenhuma habilidade" : "Digite o código"}
+                disabled={!value.grade || !value.subject}
+                placeholder="Digite o código"
                 data-testid="input-skill"
               />
               <datalist id="skills-list">
