@@ -33,13 +33,13 @@ export function useClasses() {
       id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString() + Math.random().toString(36).substring(2),
       createdAt: Date.now(),
     };
-    
+
     setClasses((prev) => {
       const updated = [...prev, newClass];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       return updated;
     });
-    
+
     return newClass;
   }, []);
 

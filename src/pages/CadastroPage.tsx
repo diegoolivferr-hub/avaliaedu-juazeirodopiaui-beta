@@ -149,7 +149,7 @@ export default function CadastroPage() {
     ...(q as QuestionFormValue),
     id: q._tempId,
     createdAt: i,
-  }));
+  } as unknown as Question));
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -218,7 +218,7 @@ export default function CadastroPage() {
                     ...editingQuestion,
                     id: editingQuestion._tempId,
                     createdAt: 0,
-                  } as Question)
+                  } as unknown as Question)
                 : null
             }
             batchMode={!editingId}

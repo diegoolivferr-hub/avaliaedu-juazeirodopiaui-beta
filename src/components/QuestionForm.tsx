@@ -52,7 +52,6 @@ import {
   ArrowUp,
   ArrowDown,
   Trash2,
-  AlertTriangle,
 } from "lucide-react";
 
 export interface OptionalBlock {
@@ -305,16 +304,13 @@ export function QuestionForm({
     (s) => s.grade === value.grade && s.subjectId === currentSubjectId
   );
 
-  const validBNCC = !!value.grade && !!value.subject && !!value.skill;
+  const validBNCC = !!value.grade && !!value.subject;
 
   /**
-   * O formulário de questão só aparece quando os 3 campos BNCC estão
-   * preenchidos (etapa + disciplina + habilidade).
+   * O formulário de questão só aparece quando etapa e disciplina estão preenchidas.
    */
   const showFormBody = validBNCC;
 
-  /** Aviso: etapa e disciplina preenchidas mas habilidade ainda não selecionada */
-  const skillMissing = !!value.grade && !!value.subject && !value.skill;
 
   const baseValid =
     validBNCC &&
@@ -376,12 +372,12 @@ export function QuestionForm({
             </span>
             {validBNCC && (
               <span className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded-full font-medium">
-                {value.grade} • {value.subject} • {value.skill}
+                {value.grade} • {value.subject}{value.skill ? ` • ${value.skill}` : ""}
               </span>
             )}
           </CardTitle>
           <p className="text-xs text-muted-foreground">
-            Selecione a etapa, disciplina e habilidade para liberar a criação da questão.
+            Selecione a etapa e disciplina para liberar a criação da questão.
           </p>
         </CardHeader>
         <CardContent>
@@ -429,9 +425,8 @@ export function QuestionForm({
               </Select>
             </div>
             <div className="space-y-1">
-              <Label className={skillMissing ? "text-destructive font-semibold" : ""}>
-                Habilidade
-                {skillMissing && <span className="ml-1 text-xs">(obrigatório)</span>}
+              <Label>
+                Habilidade (opcional)
               </Label>
               <Select
                 value={value.skill || ""}
@@ -441,7 +436,6 @@ export function QuestionForm({
                 <SelectTrigger
                   ref={skillTriggerRef}
                   data-testid="select-skill"
-                  className={skillMissing ? "border-destructive ring-2 ring-destructive/30" : ""}
                 >
                   <SelectValue placeholder={filteredSkills.length === 0 ? "Nenhuma habilidade" : "Selecione"} />
                 </SelectTrigger>
@@ -453,12 +447,6 @@ export function QuestionForm({
                   ))}
                 </SelectContent>
               </Select>
-              {skillMissing && (
-                <p className="text-xs text-destructive flex items-center gap-1 mt-1">
-                  <AlertTriangle className="w-3 h-3 shrink-0" />
-                  Selecione uma habilidade antes de adicionar a questão
-                </p>
-              )}
             </div>
           </div>
         </CardContent>
@@ -1102,7 +1090,7 @@ export function QuestionForm({
                         ...value,
                         id: "preview",
                         createdAt: Date.now(),
-                      } as Question
+                      } as unknown as Question
                     ]}
                     formatting={{
                       margin: "Média",
@@ -1138,11 +1126,6 @@ export function QuestionForm({
               )}
               {submitLabel ?? (initial ? "Salvar alterações" : "Salvar questão")}
             </Button>
-            {skillMissing && (
-              <p className="text-xs text-destructive">
-                Selecione uma habilidade para continuar
-              </p>
-            )}
           </div>
         </>
       ) : (
